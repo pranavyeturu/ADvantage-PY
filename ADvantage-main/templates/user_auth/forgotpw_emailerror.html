@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forgot Password</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'user_auth/css/forgotpw_emailerror.css' %}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main class="forgot-password-container">
+      <section class="password-reset-card">
+        <div class="password-reset-content">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/7c95a95e795aef11f0cfd74d6d4e42662efc06b9?placeholderIfAbsent=true&apiKey=e38bbeeeffa044528b2b40f50824f87f"
+            alt="Company Logo"
+            class="company-logo"
+          />
+          <h1 class="page-heading">Forgot your password?</h1>
+          <p class="instruction-text">
+            Please enter the email address linked to your account and we'll
+            email you a code to reset your password.
+          </p>
+          <form
+            class="password-form"
+            method="POST"
+            action="{% url 'forgot-password' %}"
+          >
+            {% csrf_token %}
+            <div class="error-message">
+              <p class="error-text">
+                The email address you entered does not match our records. Please
+                try again.
+              </p>
+            </div>
+            <div class="email-field">
+              <label for="email" class="email-label">Work Email</label>
+              <div class="input-container">
+                <div class="input-icon-area"></div>
+                <div class="input-content">
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="email-input"
+                    required
+                  />
+                  <div class="input-action"></div>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="update-password-button">
+                Update Password
+              </button>
+              <a href="{% url 'login' %}" class="sign-in-link"
+                >Back to Sign In</a
+              >
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

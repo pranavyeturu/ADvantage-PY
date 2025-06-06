@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'user_auth/css/createacc_style.css' %}"
+    />
+  </head>
+  <body>
+    <div class="create-account">
+      <div class="account-container">
+        <div class="main-body">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/a7a92863b91a39a096b489da88aeb1db0038728cdb343678cc229e48d79612b2?placeholderIfAbsent=true&apiKey=dd1fe74aed45465eb4618a55f863ee38"
+            class="logo"
+            alt="Logo"
+          />
+          <h1 class="heading">Create a free account</h1>
+          <form method="POST" action="{% url 'signup' %}" class="signup-form">
+            {% csrf_token %}
+            <div class="form-container">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    name="first_name"
+                    class="form-input"
+                    placeholder="Add your first name"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <div class="input-container">
+                  <input
+                    type="text"
+                    name="last_name"
+                    class="form-input"
+                    placeholder="Add your last name"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <div class="input-container">
+                  <input
+                    type="email"
+                    name="email"
+                    class="form-input"
+                    placeholder="sample@email.com"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="checkbox-container">
+                  <div class="checkbox-wrapper">
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      class="checkbox-input"
+                      required
+                    />
+                    <label for="terms" class="checkbox-label">
+                      I agree to all the conditions of ADvantage
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="action-container">
+              <button type="submit" class="signup-button">
+                Sign Up for Free
+              </button>
+            </div>
+          </form>
+
+          <div class="login-text">
+            <span class="login-prompt">Already have an account?</span>
+            <a href="{% url 'login' %}" class="login-link">SIGN IN</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

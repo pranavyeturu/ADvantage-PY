@@ -1,0 +1,269 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generate Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Quicksand:wght@300..700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="{% static 'user_auth/css/adstyle1.css' %}" />
+
+</head>
+<body>
+  <main class="generate-home">
+    <!-- header/nav unchanged -->
+    <header class="header">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/31245c260512d27975a8915bb3952f9ffb927a2ba4b6dbf7e87708b7179ecb18"
+        alt="Logo"
+        class="logo"
+      />
+      <nav class="nav-menu">
+        <span class="nav-item">Home</span>
+        <span class="nav-item active">Generate</span>
+        <span class="nav-item">Account</span>
+      </nav>
+      <div class="user-controls">
+        <div class="user-toggle">
+          <button
+            class="toggle-btn {% if request.path == '/auth/mainpage/' %}active{% endif %}"
+            onclick="window.location.href='{% url 'mainpage' %}';"
+          >User</button>
+          <button
+            class="toggle-btn {% if request.path == '/auth/admin-login/' %}active{% endif %}"
+            onclick="window.location.href='{% url 'admin_login' %}'"
+          >Admin</button>
+        </div>
+        <a href="{% url 'login' %}">
+          <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/647022f4aa7569d0e97dd6c4892abed130ac0e52dcde0805db5eea950c08f2e3" 
+               alt="Settings" 
+               class="settings-icon">
+        </a>
+      </div>
+    </header>
+
+    <div class="main-content">
+      <!-- ── Left: Generate form ── -->
+      <div class="form-section">
+        <section class="generate-form">
+          <h1>Generate a campaign post</h1>
+          <hr />
+          <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Product / Topic -->
+            <div class="input-group">
+              <label class="top2-input">Product / Topic</label>
+              <div class="input-field">
+                <input
+                  type="text"
+                  name="product"
+                  placeholder="Add a product, event, campaign"
+                  value="{{ form.product.value }}"
+                  required
+                />
+              </div>
+            </div>
+            <!-- Description -->
+            <div class="input-group">
+              <label class="top2-input">Description</label>
+              <div class="input-field">
+                <textarea
+                  name="description"
+                  placeholder="Add Product Information"
+                  required
+                >{{ form.description.value }}</textarea>
+              </div>
+            </div>
+            <!-- Remarks -->
+            <div class="input-group">
+              <label class="top2-input">Remarks</label>
+              <div class="input-field">
+                <textarea
+                  name="remarks"
+                  placeholder="Add any Remarks"
+                >{{ form.remarks.value }}</textarea>
+              </div>
+            </div>
+            <!-- Tone only -->
+            <div class="input-group">
+              <label class="top2-input">Tone of the Ad</label>
+              <div class="input-field">
+                <select name="tone" required>
+                  <option value="casual"
+                    {% if form.tone.value == 'casual' %}selected{% endif %}>
+                    Casual
+                  </option>
+                  <option value="formal"
+                    {% if form.tone.value == 'formal' %}selected{% endif %}>
+                    Formal
+                  </option>
+                  <option value="gen-z"
+                    {% if form.tone.value == 'gen-z' %}selected{% endif %}>
+                    Gen-Z
+                  </option>
+                </select>
+              </div>
+            </div>
+            <!-- CSV upload -->
+            <div class="custom-file-upload">
+              <label class="top2-input">Upload CSV File</label>
+              <div class="input-field">
+                <label for="fileInput" class="file-label">Choose File</label>
+                <input
+                  type="file"
+                  name="csv_file"
+                  id="fileInput"
+                  accept=".csv"
+                  onchange="updateFileName()"
+                />
+                <span class="file-name" id="fileName">
+                  {{ form.csv_file.value|default:"No file chosen" }}
+                </span>
+              </div>
+            </div>
+            <!-- Hashtag toggle -->
+            <div class="toggle-section">
+              <span>Include hashtags</span>
+              <div class="toggle-switch">
+                <input
+                  type="checkbox"
+                  name="include_hashtags"
+                  id="hashtags"
+                  {% if form.include_hashtags.value %}checked{% endif %}
+                />
+                <label for="hashtags"></label>
+              </div>
+            </div>
+            <!-- Company name -->
+            <div class="input-group">
+              <div class="label-group">
+                <label>Company name</label>
+                <span class="optional">Optional</span>
+              </div>
+              <div class="input-field">
+                <input
+                  type="text"
+                  name="company_name"
+                  placeholder="Add company name"
+                  value="{{ form.company_name.value }}"
+                />
+              </div>
+            </div>
+            <button type="submit" class="generate-btn">Generate post</button>
+          </form>
+        </section>
+      </div>
+
+      <!-- ── Right: Illustration or Generated Ads ── -->
+      <div class="illustration-section">
+        {% if result %}
+          <div class="generated-ads">
+            <h2>Generated Ads:</h2>
+            <form method="POST" action="{% url 'select_ads' campaign.id %}">
+              {% csrf_token %}
+              <div class="ad-content1">
+                {% for ad in result %}
+                  <div class="ad-edit-row">
+                    <!-- choose ad -->
+                    <input
+                      type="radio"
+                      name="selected"
+                      id="sel_{{ forloop.counter }}"
+                      value="{{ forloop.counter }}"
+                      {% if forloop.first %}checked{% endif %}
+                    />
+                    <!-- display -->
+                    <div
+                      id="ad_display_{{ forloop.counter }}"
+                      class="ad-text ad-display"
+                    >{{ ad }}</div>
+                    <!-- editor -->
+                    <textarea
+                      id="ad_edit_{{ forloop.counter }}"
+                      class="ad-text ad-textarea"
+                      name="ad_{{ forloop.counter }}"
+                      rows="2"
+                    >{{ ad }}</textarea>
+                    <!-- icons -->
+                    <img
+                      src="{% static 'user_auth/images/edit-button-svgrepo-com.svg' %}"
+                      alt="Edit"
+                      class="svg-icon edit-btn"
+                      data-id="{{ forloop.counter }}"
+                      title="Edit this ad"
+                    />
+                    <img
+                      src="{% static 'user_auth/images/save-svgrepo-com.svg' %}"
+                      alt="Save"
+                      class="svg-icon save-btn"
+                      data-id="{{ forloop.counter }}"
+                      title="Save edits"
+                      style="display:none;"
+                    />
+                  </div>
+                {% endfor %}
+              </div>
+              <button
+                type="submit"
+                name="action"
+                value="save"
+                class="save-ads-btn"
+              >Save only</button>
+              <button
+                type="submit"
+                name="action"
+                value="send"
+                class="send-ads-btn"
+              >Send Ads!</button>
+            </form>
+          </div>
+        {% else %}
+          <!-- original illustration when no result -->
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/30b408011d20858d78c96c60cecb1cd244e2da45f22c62ec9289df695345a1ff"
+            alt="Campaign illustration"
+            class="main-illustration"
+          />
+          <h2>Create impactful posts for your campaigns using our AI Labs</h2>
+          <p class="ai-info">
+            Our AI technology uses high-efficiency LLM models which ensure
+            meaningful text generation.
+          </p>
+        {% endif %}
+      </div>
+
+    </div>
+  </main>
+
+  <script src="{% static 'user_auth/js/adjava.js' %}"></script>
+  <script>
+    // Edit → Save toggles
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        document.getElementById(`ad_display_${id}`).style.display = 'none';
+        document.getElementById(`ad_edit_${id}`).style.display    = 'block';
+        btn.style.display = 'none';
+        document.querySelector(`.save-btn[data-id="${id}"]`).style.display = 'inline';
+      });
+    });
+    document.querySelectorAll('.save-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        const ta = document.getElementById(`ad_edit_${id}`);
+        const dv = document.getElementById(`ad_display_${id}`);
+        dv.innerText = ta.value;
+        dv.style.display  = 'block';
+        ta.style.display  = 'none';
+        btn.style.display = 'none';
+        document.querySelector(`.edit-btn[data-id="${id}"]`).style.display = 'inline';
+      });
+    });
+  </script>
+</body>
+</html>
