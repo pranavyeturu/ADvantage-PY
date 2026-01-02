@@ -53,7 +53,7 @@ ADvantage is a Django-based platform that generates **trend-aligned ad creatives
   - Google Custom Search (API key + CX)
 - SMTP credentials (Gmail App Password recommended)
 
-### 1) Install dependencies
+### 1) Install dependencies, make migrations and run server 
 ```bash
 pip install -r requirements.txt
 cd AD_gen
