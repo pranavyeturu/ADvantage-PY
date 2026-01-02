@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In</title>
+    <link rel="stylesheet" href="{% static 'user_auth/css/admin.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/31245c260512d27975a8915bb3952f9ffb927a2ba4b6dbf7e87708b7179ecb18"
+        alt="Logo"
+        class="logo"
+      />
+      <div class="user-controls">
+        <div class="user-toggle">
+          <button
+            class="toggle-btn {% if request.path == '/auth/mainpage/' %}active{% endif %}"
+            onclick="window.location.href='{% url 'login' %}';"
+          >
+            User
+          </button>
+          <button
+            class="toggle-btn {% if request.path == '/auth/admin-login/' %}active{% endif %}"
+            onclick="window.location.href='{% url 'admin_login' %}'"
+          >
+            Admin
+          </button>
+        </div>
+        <a href="{% url 'login' %}">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/647022f4aa7569d0e97dd6c4892abed130ac0e52dcde0805db5eea950c08f2e3"
+            alt="Settings"
+            class="settings-icon"
+          />
+        </a>
+      </div>
+    </header>
+    <main class="sign-in-container">
+      <section class="sign-in-card">
+        <article class="sign-in-content">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/63fcfdbd6fbcb1ec7e42c9b25d489db85cc36243?placeholderIfAbsent=true&apiKey=e38bbeeeffa044528b2b40f50824f87f"
+            alt="Company Logo"
+            class="company-logo"
+          />
+          <h1 class="heading">Admin Login</h1>
+          <form method="POST" class="login-form">
+            {% csrf_token %} {% if error %}
+            <p
+              class="error"
+              style="color: red; margin-bottom: 1rem; text-align: center"
+            >
+              {{ error }}
+            </p>
+            {% endif %}
+            <div class="form-inputs">
+              <div class="form-group">
+                <label class="input-label" for="username">Username</label>
+                <div class="input-container">
+                  <input
+                    id="username"
+                    name="username"
+                    class="form-input"
+                    placeholder=""
+                    required
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="input-label" for="password">Password</label>
+                <div class="input-container password-container">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    class="form-input"
+                    placeholder=""
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="login-submit">Log in</button>
+            </div>
+          </form>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

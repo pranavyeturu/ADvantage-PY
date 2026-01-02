@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Settings</title>
+    <link rel="stylesheet" href="{% static 'user_auth/css/account.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/31245c260512d27975a8915bb3952f9ffb927a2ba4b6dbf7e87708b7179ecb18"
+        alt="Logo"
+        class="logo"
+      />
+      <nav class="nav-menu">
+        <a href="{% url 'homepage' %}" class="nav-item">Home</a>
+        <a href="{% url 'mainpage' %}" class="nav-item">Generate</a>
+        <a href="{% url 'account' %}" class="nav-item active">Account</a>
+      </nav>
+      <div class="user-controls">
+        <div class="user-toggle">
+          <button
+            class="toggle-btn {% if request.path|slice:':13' != '/auth/admin-login' and request.path|slice:':15' != '/auth/admin-dashboard' %}active{% endif %}"
+            onclick="window.location.href='{% url 'mainpage' %}';"
+          >
+            User
+          </button>
+
+          <button
+            class="toggle-btn {% if request.path == '/auth/admin-login/' %}active{% endif %}"
+            onclick="window.location.href='{% url 'admin_login' %}'"
+          >
+            Admin
+          </button>
+        </div>
+        <a href="{% url 'login' %}">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/647022f4aa7569d0e97dd6c4892abed130ac0e52dcde0805db5eea950c08f2e3"
+            alt="Settings"
+            class="settings-icon"
+          />
+        </a>
+      </div>
+    </header>
+
+    <main class="container">
+      <h1>Account settings</h1>
+
+      <section class="section">
+        <div class="section-header">
+          <h2>Account info</h2>
+          <button class="edit-btn">✏️ Edit</button>
+        </div>
+        <div class="info-row">
+          <span>Name</span
+          ><strong>{{ user.get_full_name|default:"Not set" }}</strong>
+        </div>
+        <div class="info-row">
+          <span>Email</span><strong>{{ user.email|default:"Not set" }}</strong>
+        </div>
+
+        <div class="info-row">
+          <span>Department</span><strong class="muted">Not set</strong>
+        </div>
+        <div class="info-row">
+          <span>Role</span><strong class="muted">Not set</strong>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <h2>Password change</h2>
+          <a href="{% url 'forgot-password' %}" class="edit-btn">✏️ Change</a>
+        </div>
+        <p class="note">
+          A valid password must contain a minimum of 12 characters, and a
+          minimum of one lower case letter, one upper case letter, one special
+          character and one number.
+        </p>
+      </section>
+
+      <section class="section subscription">
+        <div class="section-footer">
+          <button class="edit-btn blue">
+            Monthly / Subscriptions Coming Soon!
+          </button>
+          <div class="sub-info">
+            <span>Pay as you use</span>
+            <button class="edit-btn">Default</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

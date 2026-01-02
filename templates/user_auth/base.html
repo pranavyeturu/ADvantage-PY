@@ -1,0 +1,57 @@
+{# templates/user_auth/base.html #} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>{% block title %}ADvantage{% endblock %}</title>
+
+    <!-- your site-wide CSS -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'user_auth/css/adstyle.css' %}" />
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body>
+    <header class="header-1">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets/TEMP/31245c260512d27975a8915bb3952f9ffb927a2ba4b6dbf7e87708b7179ecb18"
+        alt="Logo"
+        class="logo"
+      />
+      <nav class="nav-menu">
+        <a href="{% url 'homepage' %}" class="nav-item">Home</a>
+        <a href="{% url 'mainpage' %}" class="nav-item">Generate</a>
+        <a href="{% url 'account' %}" class="nav-item">Account</a>
+      </nav>
+      <div class="user-controls">
+        <div class="user-toggle">
+          <button
+            class="toggle-btn {% if request.path == '/auth/mainpage/' %}active{% endif %}"
+            onclick="window.location.href='{% url 'mainpage' %}';"
+          >
+            User
+          </button>
+          <button
+            class="toggle-btn {% if '/admin-login/' in request.path or '/admin-dashboard/' in request.path %}active{% endif %}"
+            onclick="window.location.href='{% url 'admin_login' %}'"
+          >
+            Admin
+          </button>
+        </div>
+        <a href="{% url 'login' %}">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/647022f4aa7569d0e97dd6c4892abed130ac0e52dcde0805db5eea950c08f2e3"
+            alt="Settings"
+            class="settings-icon"
+          />
+        </a>
+      </div>
+    </header>
+    <main class="generate-home">{% block content %}{% endblock %}</main>
+
+    <script src="{% static 'user_auth/js/admin.js' %}"></script>
+  </body>
+</html>
